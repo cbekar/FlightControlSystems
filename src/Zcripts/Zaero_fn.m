@@ -63,15 +63,18 @@ C_n_beta = 0.2600;
 C_n_d_rud = -0.2000;
 C_n_r = -0.3500;
 
-%forces = [ Fx, Fy, Fz ] Aerodynamic force components
-Fx = -1*dyn_pressure*S*(C_D_0+C_D_d_ele*def_elevator/0.3);
-Fy = -1*dyn_pressure*S*(C_Y_beta*beta);
-Fz = -1*dyn_pressure*S*(C_L_tot);
+D = dyn_pressure*S*(C_D_0+C_D_d_ele*def_elevator/0.3);
+Y = dyn_pressure*S*(C_Y_beta*beta);
+l = dyn_pressure*S*(C_L_tot);
 
-%moments = [ L, M, N ] Aerodyanmic moment components
 L = dyn_pressure*S*b*(C_l_beta*beta+C_l_d_ail*def_aileron+C_l_d_rud*def_rudder+C_l_p*(P*b/(2*V0))+C_l_r*(R*b/(2*V0)));
 M = dyn_pressure*S*c*(C_m_alp*alpha+C_m_d_ele*def_elevator+C_m_alpdot*(alpha_dot*c/(2*V0))+C_m_q*(Q*c/(2*V0)));
 N = dyn_pressure*S*b*(C_n_beta*beta+C_n_d_rud*def_rudder+C_n_r*(R*b/(2*V0)));
-forces = [Fx,Fy,Fz];
-moments = [L,M,N];
+
+ca = cos(alpha); cb = cos(beta);
+sa = sin(alpha); sb = sin(beta);
+dcm = [ca*cb, sb, sa*cb; -ca*sb, cb, -sa*sb; -sa 0 ca];
+
+forces = (-1.*dcm\[D,Y,l]')';
+moments = (dcm\[L,M,N]')';
 end

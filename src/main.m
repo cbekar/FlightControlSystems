@@ -20,9 +20,9 @@ for i = 1:length(speeds)
     i
     S.states.v  = speeds(i);
     S.states.h  = 20000;
-    %S.rad  = 60000;
-    S.rad  = Inf;
-    S.states.gamma = deg2rad(-5);
+    S.rad  = 40000;
+    %S.rad  = Inf;
+    S.states.gamma = deg2rad(0);
     S.gd   = Zgravity_fcn(S.states.n,S.states.e,S.states.h)*3.28084;
     Sarr = zeros(6,1)';
 
