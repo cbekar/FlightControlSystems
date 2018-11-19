@@ -1,4 +1,4 @@
-function xdot = Zeom_fcn(forces,moments, g, thrust,x)
+function xdot = Zeom_fn(forces,moments, g, thrust,x)
 
 xdot = zeros(12,1);
 
