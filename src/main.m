@@ -8,12 +8,24 @@ S = struct('states',...
                'n',0,'e',0,'h',0),...
           'controls',...
                struct('t',0,'e',0,'a',0,'r',0));
-[S.states.v,~,f1] = trimloop(650:50:800);
+[S.states.v,~,f1] = trimloop(700);
+simtime = 300;
+sampleTime = 0.01;
+numberOfSamples = simtime * 1/sampleTime +1;
+timeVector = (0:numberOfSamples) * sampleTime;
+
+usignal(:,1) = timeVector';
+usignal(:,2) = f1(3)*ones(1,size(timeVector,2))';
+usignal(:,3) = f1(4)*ones(1,size(timeVector,2))';
+usignal(:,4) = f1(5)*ones(1,size(timeVector,2))';
+usignal(:,5) = f1(6)*ones(1,size(timeVector,2))';
 xu = [S.states.v,f1(1),f1(2),f1(7),f1(1)+S.states.gamma,0,0,0,0,0,0,S.states.h]; 
 uu = [f1(3),f1(4),f1(5),f1(6)]; 
 sim('B733_JSB');
 %% Linearization
-[A,B,C,D] = linmod('B733_JSB')
+[A,B,C,D] = linmod('B733_JSB',xu,uu);
+A
+B
 eig(A)
 
 function [optspeed,cost,trim] = trimloop(speeds)
@@ -23,14 +35,16 @@ for i = 1:length(speeds)
     i
     S.states.v  = speeds(i);
     S.states.h  = 20000;
-    S.rad  = 40000;
-    %S.rad  = Inf;
+    %S.rad  = 40000;
+    S.rad  = Inf;
     S.states.gamma = deg2rad(0);
     S.gd   = Zgravity_fn(S.states.n,S.states.e,S.states.h)*3.28084;
     Sarr = zeros(6,1)';
 
-    options =  optimset(...
-        'Display','iter','TolFun',1e-15,'TolX', 1e-15, 'TolCon', 1e-15);
+    %options =  optimset('TolFun',1e-25,'TolX',1e-25,'MaxFunEvals',15e+9,...
+    %    'MaxIter',15e+9,'FunValCheck','on','PlotFcns',@optimplotfval);
+    options =  optimset('TolFun',1e-25,'TolX',1e-25,'MaxFunEvals',15e+9,...
+        'MaxIter',15e+9,'FunValCheck','on');
     [f1(i,1:6), costs(i),~,out] = ...
         fmincon('Zcostfn',Sarr,[],[],[],[],...
         [-pi/2 -pi/2 0 -0.3 -0.35 -0.35],[pi/2 pi/2 1 0.3 0.35 0.35],...
