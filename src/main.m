@@ -3,7 +3,7 @@ global S Tmil engineCount engineLUT;
 Zinit('737');
 S = struct('states',...
                struct('v',0,'alpha',0,'beta',0,'gamma',0,...
-               'phi',0,'theta',0,'ksi',0,...
+               'phi',0,'theta',0,'psi',0,...
                'p',0,'q',0,'r',0,...
                'n',0,'e',0,'h',0),...
           'controls',...
@@ -24,10 +24,31 @@ uu = [f1(3),f1(4),f1(5),f1(6)];
 sim('B733_JSB');
 %% Linearization
 [A,B,C,D] = linmod('B733_JSB',xu,uu);
-A
-B
-eig(A)
+% Swap states and inputs for the ease of generating A B matrices.
+Along = [A(1,1) A(1,2) A(1,5) A(1,8);
+        A(2,1) A(2,2) A(2,5) A(2,8);
+        A(5,1) A(5,2) A(5,5) A(5,8);
+        A(8,1) A(8,2) A(8,5) A(8,8)
+       ];
+Alat  = [A(3,3) A(3,4) A(3,7) A(3,9);
+        A(4,3) A(4,4) A(4,7) A(4,9);
+        A(7,3) A(7,4) A(7,7) A(7,9);
+        A(9,3) A(9,4) A(9,7) A(9,9)
+       ];
+Blong = [B(1,1:2); B(2,1:2); B(5,1:2); B(8,1:2)];
+Blat  = [B(3,3:4); B(4,3:4); B(7,3:4); B(9,3:4)];
+C  = eye(2,4);
+D  = zeros(2);
+%% Controller designs
+% 1) Find SAS gains
+% 1-A) Longitudinal
+% 1-A-i) Pitch Damper
+[pitchSASnum,pitchSASden] = ss2tf(Along,Blong,C,D,2);
+alpElv = tf(pitchSASnum(1,:),pitchSASden);
+qElv   = tf(pitchSASnum(2,:),pitchSASden);
+rlocus(alpElv)
 
+%%
 function [optspeed,cost,trim] = trimloop(speeds)
 %% trimloop returns the optimal speed (wrt linearization cost) for a chosen altitude
 global S
