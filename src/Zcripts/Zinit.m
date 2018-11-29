@@ -1,9 +1,6 @@
 function Zinit(model)
 clc; clear all
 global Tmil engineCount engineLUT
-addpath('src');
-addpath('data');
-addpath('img');
 %TODO check for other xmls 
 %This is the function that the model preloads, adding the necessary structs
 %and vars from parsed xmls to the workspace for the consumption by the 

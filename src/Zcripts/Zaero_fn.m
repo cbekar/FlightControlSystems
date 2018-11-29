@@ -30,13 +30,13 @@ C_Y_beta = -1;
 
 table = [
     -0.2000   -0.6800
-    0    0.2000
+    0         0.2000
     0.2300    1.2000
     0.4600    0.2000];
 
 C_L_0 = fixpt_interp1(table(:,1),table(:,2),alpha,'double',1,'double',1,'Nearest');
 
-C_L_d_ele = 0.0590;
+C_L_d_ele = 0.2;
 C_L_tot = C_L_0+C_L_d_ele*def_elevator;
 
 C_Di = C_L_tot*C_L_tot*0.043;
@@ -52,8 +52,8 @@ C_l_p = -0.40;
 C_l_r = 0.09;
 
 C_m_alp = -0.6;
-table = [         0    0.1000
-    2.0000    0.0330];
+table = [0         -1.2
+    2.0000    -0.3];
 C_m_d_ele = fixpt_interp1(table(:,1),table(:,2),M,'double',1,'double',1,'Nearest'); 
 
 C_m_alpdot = -16;

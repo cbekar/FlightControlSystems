@@ -43,11 +43,34 @@ D  = zeros(2);
 % 1) Find SAS gains
 % 1-A) Longitudinal
 % 1-A-i) Pitch Damper
-[pitchSASnum,pitchSASden] = ss2tf(Along,Blong,C,D,2);
-alpElv = tf(pitchSASnum(1,:),pitchSASden);
-qElv   = tf(pitchSASnum(2,:),pitchSASden);
-rlocus(alpElv)
-
+Bpd = Blong(:,2);
+Apd_aug = [Along, -Bpd, zeros(4,1); [0 0 0 0 -10 0]; [0 10 0 0 0 -10]];
+Bpd_aug = [zeros(4,1); 10; 0];
+Cpd_aug = [C zeros(2); zeros(1,5) 1];
+k= logspace(-2,1,2000);
+rlocus(Apd_aug,Bpd_aug,Cpd_aug(3,:),0,k); 
+grid on
+axis([-15,1,-10,10])
+% Here we can observe performance degredation for alpha feedback
+Apd_aug = [Along, -Bpd, zeros(4,1); [0 0 0 0 -10 0]; [0 0 0 10 0 -10]];
+Bpd_aug = [zeros(4,1); 10; 0];
+Cpd_aug = [C zeros(2); zeros(1,5) 1];
+figure
+rlocus(Apd_aug,Bpd_aug,Cpd_aug(3,:),0,k); 
+grid on
+axis([-15,1,-10,10])
+% Here we can observe flying quality for 0.6 pitch rate feedback gives good
+% longitudinal frequencies and damping ratios (according to Nelson pg. 167)
+% [pitchSASnum,pitchSASden] = ss2tf(Along,Blong,C,D,2);
+% alpElv = tf(pitchSASnum(1,:),pitchSASden);
+% rlocus(alpElv)
+% qElv   = tf(pitchSASnum(2,:),pitchSASden);
+% rlocus(qElv)
+Apd_cl = Apd_aug - Bpd_aug.*0.558*Cpd_aug(3,:);
+figure
+rlocus(Apd_cl,Bpd_aug,Cpd_aug(3,:),0,k);
+grid on
+axis([-15,1,-10,10])
 %%
 function [optspeed,cost,trim] = trimloop(speeds)
 %% trimloop returns the optimal speed (wrt linearization cost) for a chosen altitude
@@ -55,8 +78,8 @@ global S
 for i = 1:length(speeds)
     i
     S.states.v  = speeds(i);
-    S.states.h  = 20000;
-    %S.rad  = 40000;
+    S.states.h  = 30000;
+    %S.rad  = 100000;
     S.rad  = Inf;
     S.states.gamma = deg2rad(0);
     S.gd   = Zgravity_fn(S.states.n,S.states.e,S.states.h)*3.28084;
