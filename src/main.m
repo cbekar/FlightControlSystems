@@ -66,11 +66,22 @@ axis([-15,1,-10,10])
 % rlocus(alpElv)
 % qElv   = tf(pitchSASnum(2,:),pitchSASden);
 % rlocus(qElv)
-Apd_cl = Apd_aug - Bpd_aug.*0.558*Cpd_aug(3,:);
+%%
+Apd_cl = Apd_aug - Bpd_aug.*1*Cpd_aug(3,:);
 figure
 rlocus(Apd_cl,Bpd_aug,Cpd_aug(3,:),0,k);
 grid on
 axis([-15,1,-10,10])
+
+t= [0:.02:10]; % 501 points for plot
+%u= [zeros(1,50),1.8*ones(1,451)]'; %step
+u= [-1.8*ones(1,51),1.8*ones(1,50),zeros(1,400)]'; % Doublet
+[y,x]= lsim(Apd_cl,Bpd_aug(:,1),Cpd_aug(3,:),0,u,t); % Linear simulation
+plot(t,y,t,u)
+grid on
+hold on
+[y,x]= lsim(Apd_aug,Bpd_aug(:,1),Cpd_aug(3,:),0,u,t); % Linear simulation
+plot(t,y)
 %%
 function [optspeed,cost,trim] = trimloop(speeds)
 %% trimloop returns the optimal speed (wrt linearization cost) for a chosen altitude
