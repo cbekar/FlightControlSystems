@@ -48,10 +48,11 @@ Apd_aug = [Along, -Bpd, zeros(4,1); [0 0 0 0 -10 0]; [0 10 0 0 0 -10]];
 Bpd_aug = [zeros(4,1); 10; 0];
 Cpd_aug = [C zeros(2); zeros(1,5) 1];
 k= logspace(-2,1,2000);
+% Here we can observe performance degredation for alpha feedback
 rlocus(Apd_aug,Bpd_aug,Cpd_aug(3,:),0,k); 
 grid on
 axis([-15,1,-10,10])
-% Here we can observe performance degredation for alpha feedback
+
 Apd_aug = [Along, -Bpd, zeros(4,1); [0 0 0 0 -10 0]; [0 0 0 10 0 -10]];
 Bpd_aug = [zeros(4,1); 10; 0];
 Cpd_aug = [C zeros(2); zeros(1,5) 1];
@@ -59,7 +60,7 @@ figure
 rlocus(Apd_aug,Bpd_aug,Cpd_aug(3,:),0,k); 
 grid on
 axis([-15,1,-10,10])
-% Here we can observe flying quality for 0.6 pitch rate feedback gives good
+% Here we can observe flying quality for 1 pitch rate feedback gives good
 % longitudinal frequencies and damping ratios (according to Nelson pg. 167)
 % [pitchSASnum,pitchSASden] = ss2tf(Along,Blong,C,D,2);
 % alpElv = tf(pitchSASnum(1,:),pitchSASden);
@@ -67,7 +68,8 @@ axis([-15,1,-10,10])
 % qElv   = tf(pitchSASnum(2,:),pitchSASden);
 % rlocus(qElv)
 %%
-Apd_cl = Apd_aug - Bpd_aug.*1*Cpd_aug(3,:);
+kq = 1;
+Apd_cl = Apd_aug - Bpd_aug.*kq*Cpd_aug(3,:);
 figure
 rlocus(Apd_cl,Bpd_aug,Cpd_aug(3,:),0,k);
 grid on
