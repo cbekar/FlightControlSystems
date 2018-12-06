@@ -10,6 +10,7 @@ for i = 26:-1:1
     %S.rad  = 100000;
     S.rad  = Inf;
     S.states.gamma = deg2rad(txt(index+i,15));
+    %S.weight = txt(index+i,9)*2.2;
     S.gd   = Zgravity_fn(S.states.n,S.states.e,S.states.h)*3.28084;
     Sarr = zeros(6,1)';
 

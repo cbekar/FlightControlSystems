@@ -26,7 +26,7 @@ C_D_beta = fixpt_interp1(table(:,1),table(:,2),beta,'double',1,'double',1,'Neare
 
 C_D_d_ele = 0.0590;
 
-C_Y_beta = -1;
+C_Y_beta = 1; %this was reported as -1, however sideslip derivatives turns out that this should be +1
 
 table = [
     -0.2000   -0.6800
