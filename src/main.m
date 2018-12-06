@@ -129,3 +129,18 @@ grid on
 hold on
 [y,x]= lsim(a,b(:,1),c(1,:),0,u,t); % Linear simulation
 plot(t,y,t,u)
+%% 
+% 2) Find CAS gains
+% 2-A) Longitudinal 
+% Pitch Rate
+Apr = Along(1:2, 1:2);
+Bpr = Blong(1:2, 2);
+Cpr = eye(2);
+Dpr = [0; 0];
+
+sysp = ss(Apr, Bpr, Cpr, Dpr);
+sysa = ss(-10, 10, -1, 0);
+sys1 = series( sysa, sysp );
+sysf = ss(-10, [10 0], [1; 0], [0 0; 0 1]);
+sys2 = series( sys1, sysf );
+[a, b, c, d] = ssdata( sys2 );
