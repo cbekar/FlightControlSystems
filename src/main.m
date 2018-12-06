@@ -58,10 +58,8 @@ axis([-15,1,-10,10])
 % rlocus(alpElv)
 % qElv   = tf(pitchSASnum(2,:),pitchSASden);
 % rlocus(qElv)
-%%
 kq = 0.88;
 Apd_cl = Apd_aug - Bpd_aug.*kq*Cpd_aug(3,:);
-figure
 rlocus(Apd_cl,Bpd_aug,Cpd_aug(3,:),0,k);
 grid on
 axis([-15,1,-10,10])
@@ -75,16 +73,9 @@ grid on
 hold on
 [y,x]= lsim(Apd_aug,Bpd_aug(:,1),Cpd_aug(3,:),0,u,t); % Linear simulation
 plot(t,y)
-close all
 %% 
 % 1-B) Lateral
 % Roll-Yaw Damper
-[rw,ur] = ss2tf(Alat,Blat,Clat,D,2);
-yawRud = tf(rw(1,:),ur);
-rlocus(yawRud)
-qElv   = tf(rw(2,:),ur);
-rlocus(qElv)
-
 Aact = [-10 0; 0 -10]; Bact = [10 0; 0 10]; Cact = [1 0; 0 -1]; 
 actuator = ss(Aact, Bact, Cact, D);
 plant    = ss(Alat, Blat, Clat, D);
@@ -97,7 +88,6 @@ sys2= series(sys1,wash); % x1=wash, x2=beta,.., x6=ail, x7=rdr
 
 [a,b,c,d]= ssdata(sys2);
 k= linspace(0,.9,3000);
-figure
 rlocus(a,b(:,1),c(1,:),0,k); %aileron to roll
 grid on
 axis([-12,1,-5,5])
@@ -117,7 +107,7 @@ grid on
 
 kr = 0.6;
 acl2= a - b*[kp 0; 0 kr]*c;
-zpk(ss(acl2,b(:,2),c(2,:),0)) % c.l. roll-rate t.f.
+zpk(ss(acl2,b(:,2),c(2,:),0)); % c.l. roll-rate t.f.
 rlocus(acl2,b(:,2),c(2,:),0)
 grid on
 
@@ -129,18 +119,5 @@ grid on
 hold on
 [y,x]= lsim(a,b(:,1),c(1,:),0,u,t); % Linear simulation
 plot(t,y,t,u)
-%% 
-% 2) Find CAS gains
-% 2-A) Longitudinal 
-% Pitch Rate
-Apr = Along(1:2, 1:2);
-Bpr = Blong(1:2, 2);
-Cpr = eye(2);
-Dpr = [0; 0];
-
-sysp = ss(Apr, Bpr, Cpr, Dpr);
-sysa = ss(-10, 10, -1, 0);
-sys1 = series( sysa, sysp );
-sysf = ss(-10, [10 0], [1; 0], [0 0; 0 1]);
-sys2 = series( sys1, sysf );
-[a, b, c, d] = ssdata( sys2 );
+%%
+close all
