@@ -1,5 +1,4 @@
 function s = Zinit(model)
-clc; clear all
 global S Tmil engineCount engineLUT
 %TODO check for other xmls 
 %This is the function that the model preloads, adding the necessary structs

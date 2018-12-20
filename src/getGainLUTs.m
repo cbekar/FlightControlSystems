@@ -17,6 +17,9 @@ global S
         Blat  = [B(3,3:4); B(4,3:4); B(7,3:4); B(9,3:4)];
         Clong = [0 1 0 0; 0 0 0 1]; Clat = [0 0 1 0; 0 0 0 1];
         D  = zeros(2);
+        % 1) Find SAS gains
+        % 1-A) Longitudinal
+        % Pitch Damper
         Bpd = Blong(:,2);
         Apd_aug = [Along, -Bpd, zeros(4,1); [0 0 0 0 -10 0]; [0 10 0 0 0 -10]];
         Bpd_aug = [zeros(4,1); 10; 0];
@@ -102,6 +105,7 @@ global S
         hold on
         [y,x]= lsim(a,b(:,1),c(1,:),0,u,t); % Linear simulation
         plot(t,y,t,u)
+        close all
     end
     S.kqLUT(:,1) = S.M';
     S.kqLUT(:,2) = [172 151 159 154 160 92 91 75 76 80 80 68 66 65 73 71 74 78 84 85 91 85 105 104 120 130]/100';
