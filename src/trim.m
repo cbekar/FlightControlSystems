@@ -34,5 +34,14 @@ end
 %    S.trim(ind,4),S.trim(ind,5),S.trim(ind,6))
 optspeed = txt(index+ind,6)*1.68781;
 opttrim =  S.trim(ind,:);
+fixLUT_breakpoints();
+end
+function fixLUT_breakpoints()
+    global S;
+    for i = 1:length(S.M)-1
+        if S.M(i+1) <= S.M(i)
+            S.M(i+1) = S.M(i+1) + 0.0001*i;
+        end
+    end
 end
 
