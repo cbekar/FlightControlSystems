@@ -4,7 +4,7 @@ global S Tmil engineLUT engineCount;
 % Fast mode: The global variable S is loaded from file (default: fast mode)
 % Slow mode: S is generated from scratch
 % modern:    0 = Classical Control (incomplete), 1 = EigStructure, 2 = LQR
-fast = 0; simulink = 0; modern = 1; selectedTrimIndex = 20;
+fast = 1; simulink = 1; modern = 1; selectedTrimIndex = 20;
 %% Initialization of nonlinear model for selected aircraft from JSB_SIM
 % Tested only for B737!
 Zinit('737');
@@ -24,10 +24,9 @@ if fast == 0
 else
     load('B733_MMCR.mat');
 end
-if simulink == 1
-    fillSvalues(selectedTrimIndex);
-    sim('B733_JSB');
-    sim('B733_SAS');
-    sim('B733_CAS');
-    sim('B733_AP_PAH');
-end
+fillSvalues(selectedTrimIndex);
+sim('B733_JSB');
+fillSvalues(selectedTrimIndex); % necessary?
+sim('B733_SAS');
+sim('B733_CAS');
+sim('B733_AP_PAH');
