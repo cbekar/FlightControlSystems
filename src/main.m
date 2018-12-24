@@ -1,32 +1,27 @@
-clc; clear; 
-global S Tmil engineLUT engineCount;
+%% author: u. can bekar, aero phd stu
+clc; clear; global S;
 %% Configuration of main function
 % Fast mode: The global variable S is loaded from file (default: fast mode)
-% Slow mode: S is generated from scratch
-% modern:    0 = Classical Control (incomplete), 1 = EigStructure, 2 = LQR
-fast = 1; simulink = 1; modern = 1; selectedTrimIndex = 20;
+% modern: 0 -> Classical Control, 1 -> EigStructure, 2 -> LQR
+airframe = 'B737'; fast = 0; modern = 1; oppoint = 20; FC  = 'MMCR';
 %% Initialization of nonlinear model for selected aircraft from JSB_SIM
-% Tested only for B737!
-Zinit('737');
+Zinit(airframe);
+%% Fast/Slow switch
 if fast == 0
     %% Trimming the model for selected flight conditions with 26 FLs
-    % (default: med. mass, cruise)
-    flightcondition  = 'MMCR';
-    optimalTrimIndex = trim(strcat(S.model,'PDT'),flightcondition);
-    %% Run simulink for selected trim conditions
-    fillSvalues(selectedTrimIndex);
-    sim('B733_JSB');
-    %% Linearization
-    linearization('B733_JSB');
-    %% Controller designs
+    trim(strcat(airframe,'PDT'),FC); 
+    %% Linearization around various oppoints
+    linearization(strcat(airframe,'_JSB_0')); %_0 model has no animation
+    %% Controllers' gain 
     getGainLUTs(modern);
-    save(['mat/B733_',flightcondition])
+    save(strcat('artifacts/mat/',airframe,'_',FC,'_',string(modern)));
 else
-    load('B733_MMCR.mat');
+    load(strcat(airframe,'_',FC,'_',string(modern),'.mat'));
 end
-fillSvalues(selectedTrimIndex);
-sim('B733_JSB');
-fillSvalues(selectedTrimIndex); % necessary?
-sim('B733_SAS');
-sim('B733_CAS');
-sim('B733_AP_PAH');
+%% Sims
+fillSvalues(oppoint);
+sim(strcat(airframe,'_JSB'));
+sim(strcat(airframe,'_SAS'));
+% sim(strcat(airframe,'_CAS'));
+% sim(strcat(airframe,'_PAH'));
+close all;
