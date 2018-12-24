@@ -1,10 +1,10 @@
-function s = Zinit(model)
+function Zinit(model)
 global S Tmil engineCount engineLUT
 %TODO check for other xmls 
 %This is the function that the model preloads, adding the necessary structs
 %and vars from parsed xmls to the workspace for the consumption by the 
 %model.
-aircraft_params = xml2struct('737.xml');
+aircraft_params = xml2struct(strcat(model,'.xml'));
 engineCount = size(aircraft_params(1).fdm_config.propulsion.engine,2);
 engine_params = xml2struct(strcat(aircraft_params(1).fdm_config.propulsion.engine{1}.Attributes.file, '.xml'));
 fn = fieldnames(engine_params);
@@ -17,3 +17,4 @@ S = struct('states',...
                'n',0,'e',0,'h',0),...
           'controls',...
                struct('t',0,'e',0,'a',0,'r',0));
+S.model = model;

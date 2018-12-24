@@ -3,7 +3,7 @@ function [ind, opttrim, optspeed] = trim(pdt, type)
 global S
 txt = dlmread(strcat(pdt,'.txt'));
 index = floor(strfind(('LMCLMMCLHMCLLMDEMMDEHMDELMCRMMCRHMCR'),type)/4)*26;
-progressbar
+progressbar(strcat('Trimming ', S.model, ' for ', type, ' flight conditions from BADA perf tables'))
 for i = 26:-1:1
     v0  = txt(index+i,6)*1.68781;  S.states.v = v0;
     h0  = txt(index+i,1)*100;  S.states.h = h0;
