@@ -34,4 +34,7 @@ w = [1;
      ];
  
 cost = w'*(stateDot.^2);
+if ~isreal(cost)
+    cost = 10;
+end
 end
