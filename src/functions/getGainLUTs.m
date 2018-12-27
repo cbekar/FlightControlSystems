@@ -132,6 +132,15 @@ global S
             S.kpLUT2(i) = K(2,3);
             S.krLUT2(i) = K(2,3);
         end
+        %%
+        % 2-A) Longitudinal
+        % Pitch Rate CAS
+        if modern == 2
+%             K = CAS_Q_LQT(A, B, 1);
+%             S.kaLUT(i) = K(1);
+%             S.kqLUT(i) = K(2);
+%             S.ktLUT(i) = K(3);
+        end
         close all
     end
     if modern == 0

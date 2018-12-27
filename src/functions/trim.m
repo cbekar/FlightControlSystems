@@ -44,4 +44,3 @@ function fixLUT_breakpoints()
         end
     end
 end
-
