@@ -16,8 +16,8 @@ if fast == 0
     save(strcat('artifacts/mat/',airframe,'_',FC,'_',string(modern)));
 else
     load(strcat(airframe,'_',FC,'_',string(modern),'.mat'));
-    getGainLUTs(modern);
-%     save(strcat('artifacts/mat/',airframe,'_',FC,'_',string(modern)));
+%    getGainLUTs(modern);
+%    save(strcat('artifacts/mat/',airframe,'_',FC,'_',string(modern)));
 end
 %% Sims
 fillSvalues(oppoint);
