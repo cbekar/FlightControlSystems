@@ -15,10 +15,16 @@ function K = SAS_RollYaw_LQR(A,B,silent)
           0 10
         ];
     C = eye(6); D = zeros(6,2);
+%     tauWash = 1;
+%     aw   = -1/tauWash; bw= [0 0 0 0 0 1/tauWash];
+%     cw   = [0; 0; 0; 0; 0; 0; -1]; dw= eye(7,6);           % y1=p y2=washed-r
+%     wash = ss(aw,bw,cw,dw);
+%     [A,B,C,D] = ssdata(series(ss(A,B,C,D),wash)); % x1=wash, x2=beta,.., x6=ail, x7=rdr
     if silent == 0
         sys0 = ss(A-B*K0*C,B,C,D);
         damp(sys0)
     end
+%     Q = diag([0 35 5 5 35 0 0]);
     Q = diag([35 5 5 35 0 0]);
     R = 10*eye(2);
     K = LQR(A,B,C,D,Q,R,K0);
@@ -27,4 +33,4 @@ function K = SAS_RollYaw_LQR(A,B,silent)
         eig(sys1);
         damp(sys1);
     end
- end 
+end

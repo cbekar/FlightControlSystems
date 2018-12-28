@@ -3,7 +3,7 @@ clc; clear; global S;
 %% Configuration of main function
 % Fast mode: The global variable S is loaded from file (default: fast mode)
 % modern: 0 -> Classical Control, 1 -> EigStructure, 2 -> LQR
-airframe = 'B737'; fast = 2; modern = 2; oppoint = 20; FC  = 'MMCR';
+airframe = 'B737'; fast = 1; modern = 2; oppoint = 20; FC  = 'MMCR';
 %% Initialization of nonlinear model for selected aircraft from JSB_SIM
 Zinit(airframe);
 if fast == 0
@@ -16,10 +16,8 @@ if fast == 0
     save(strcat('artifacts/mat/',airframe,'_',FC,'_',string(modern)));
 else
     load(strcat(airframe,'_',FC,'_',string(modern),'.mat'));
-    if fast == 2
-        getGainLUTs(modern);
-    end
     getGainLUTs(modern);
+%     save(strcat('artifacts/mat/',airframe,'_',FC,'_',string(modern)));
 end
 %% Sims
 fillSvalues(oppoint);

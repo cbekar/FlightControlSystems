@@ -16,7 +16,12 @@ function K = SAS_RollYaw_EigAsgn(A,B,silent)
         ];
     C = eye(6);
     D = zeros(6,2);
-    %%      
+%     tauWash = 1;
+%     aw   = -1/tauWash; bw= [0 0 0 0 0 1/tauWash];
+%     cw   = [0; 0; 0; 0; 0;-1]; dw= eye(6);           % y1=p y2=washed-r
+%     wash = ss(aw,bw,cw,dw);
+%     [A,B,C,D] = ssdata(series(ss(A,B,C,D),wash)); % x1=wash, x2=beta,.., x6=ail, x7=rdr
+    %%
     % Check Controllability   
     Co = [B A*B A^2*B A^3*B A^4*B A^5*B];
     unco = length(A) - rank(Co);

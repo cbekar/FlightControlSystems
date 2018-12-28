@@ -2,6 +2,15 @@ function getGainLUTs(modern)
 global S
     for i=1:26
         A = S.linear(i).a; B = S.linear(i).b;
+%         if modern == 2
+%             lpf = ss(tf(1,[1 10]));
+%             lpf2 = parallel(lpf,lpf,[],[],[],[]);
+%             lpf4 = parallel(lpf2,lpf2,[],[],[],[]);
+%             lpf8 = parallel(lpf4,lpf4,[],[],[],[]);
+%             lpf12 = parallel(lpf8,lpf4,[],[],[],[]);
+%             sys = series(lpf4,ss(A,B,eye(12),zeros(12,4)),1:4,1:4);
+%             [A,B,C,D] = ssdata(series(sys,lpf12));
+%         end
         if modern == -1
             %% Decoupled open loop steady state matrices
             % Swap states and inputs for the ease of generating A B matrices.
@@ -116,21 +125,21 @@ global S
             S.kbLUT(i) = K(1,1);
             S.kphLUT(i) = K(1,2);
             S.kpLUT(i) = K(1,3);
-            S.krLUT(i) = K(1,3);
+            S.krLUT(i) = K(1,4);
             S.kbLUT2(i) = K(2,1);
             S.kphLUT2(i) = K(2,2);
             S.kpLUT2(i) = K(2,3);
-            S.krLUT2(i) = K(2,3);
+            S.krLUT2(i) = K(2,4);
         elseif modern == 2
             K = SAS_RollYaw_LQR(A, B, 1);
             S.kbLUT(i) = K(1,1);
             S.kphLUT(i) = K(1,2);
             S.kpLUT(i) = K(1,3);
-            S.krLUT(i) = K(1,3);
+            S.krLUT(i) = K(1,4);
             S.kbLUT2(i) = K(2,1);
             S.kphLUT2(i) = K(2,2);
             S.kpLUT2(i) = K(2,3);
-            S.krLUT2(i) = K(2,3);
+            S.krLUT2(i) = K(2,4);
         end
         %%
         % 2-A) Longitudinal
