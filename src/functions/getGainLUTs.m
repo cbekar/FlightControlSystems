@@ -145,7 +145,7 @@ global S
         % 2-A) Longitudinal
         % Pitch Rate CAS
         if modern == 2
-%             K = CAS_Q_LQT(A, B, 1);
+            K = CAS_Q_LQT(A, B, 1);
 %             S.kaLUT(i) = K(1);
 %             S.kqLUT(i) = K(2);
 %             S.ktLUT(i) = K(3);

@@ -16,7 +16,7 @@ function K = SAS_Pitch_LQR(A,B,silent)
         isstable(sys0)
         damp(sys0)
     end
-    Q = diag([35 5 5 0]); R = 10*eye(1); 
+    Q = diag([35 5 5 0]); R = 10;
     K = LQR(A,B,C,D,Q,R,K0);
     if silent == 0
         sys1 = ss(Ac,B,C,D);

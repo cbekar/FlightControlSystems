@@ -6,7 +6,7 @@ function [K] = LQR(A,B,C,D,Q,R,K0)
         if flag == 0
             Ac = A - B*Kold*C;
             P = lyap(Ac',C'*Kold'*R*Kold*C + Q);
-            X = eye (size(C,2));
+            X = eye(size(C,2));
             S = lyap(Ac,X);
             Jnew = (1/2)*trace(P*X);
             deltaK = R\B'*P*S*C'/(C*S*C')-Kold;

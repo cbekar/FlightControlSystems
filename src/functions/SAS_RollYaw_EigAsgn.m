@@ -14,37 +14,30 @@ function K = SAS_RollYaw_EigAsgn(A,B,silent)
           10 0;
           0 10
         ];
-    C = eye(6);
-    D = zeros(6,2);
+    C = eye(6); D = zeros(6,2);
 %     tauWash = 1;
 %     aw   = -1/tauWash; bw= [0 0 0 0 0 1/tauWash];
 %     cw   = [0; 0; 0; 0; 0;-1]; dw= eye(6);           % y1=p y2=washed-r
 %     wash = ss(aw,bw,cw,dw);
 %     [A,B,C,D] = ssdata(series(ss(A,B,C,D),wash)); % x1=wash, x2=beta,.., x6=ail, x7=rdr
-    %%
-    % Check Controllability   
-    Co = [B A*B A^2*B A^3*B A^4*B A^5*B];
-    unco = length(A) - rank(Co);
-    if silent == 0
-        if unco == 0
-        sprintf('System is Controllable')
-        else 
-            sprintf('System is Not Controllable')
+    %% Check Controllability
+    unco = length(A) - rank(ctrb(A,B));
+    if unco == 0
+        if silent == 0
+            sprintf('System is Controllable')
         end
+    else
+        error('System is Not Controllable')
     end
-    % Desired EigenValues Calculation
-    damp = 0.8; %Damping Ratio
-    wn = 3; %Natural Frequency  
-    ev1 = -damp*wn + wn*sqrt(damp^2-1); %Desired Eigenvalue1
-    ev2 = -damp*wn - wn*sqrt(damp^2-1); %Desired Eigenvalue2
-    wn = 2;
-    ev3 = -damp*wn + wn*sqrt(damp^2-1); %Desired Eigenvalue1
-    ev4 = -damp*wn - wn*sqrt(damp^2-1); %Desired Eigenvalue2
-    deigs = [ev1 ev2 ev3 ev4 -10 -10]'; %Desired Eigenvalues
-    % Gain Calculation
+    %% Desired EigenValues Calculation
+    damp = 0.3;
+    wn = 1.5;
+    ev1 = -damp*wn + wn*sqrt(damp^2-1);
+    ev2 = -damp*wn - wn*sqrt(damp^2-1);;
+    deigs = [ev1 ev2 -1 -2 -10 -10]';
+    %% Gain Calculation
     K = place(A,B,deigs);
-    %%
-    %Verifying Design
+    %% Verifying Design
     if silent == 0
         Ac = A-B*K;
         sys1 = ss(Ac,B,C,D);
