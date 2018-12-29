@@ -21,9 +21,9 @@ else
 end
 %% Sims
 fillSvalues(oppoint);
-sim(strcat(airframe,'_JSB'));
-sim(strcat(airframe,'_SAS'));
-% sim(strcat(airframe,'_CAS'));
+% sim(strcat(airframe,'_JSB'));
+% sim(strcat(airframe,'_SAS'));
+sim(strcat(airframe,'_CAS'));
 % sim(strcat(airframe,'_PAH'));
 close all;
 %% Future Work

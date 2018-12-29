@@ -146,9 +146,11 @@ global S
         % Pitch Rate CAS
         if modern == 2
             K = CAS_Q_LQT(A, B, 1);
-%             S.kaLUT(i) = K(1);
-%             S.kqLUT(i) = K(2);
-%             S.ktLUT(i) = K(3);
+            S.kaLUT2(i) = K(1);
+            S.kqLUT2(i) = K(2);
+            S.ktLUT2(i) = K(3);
+            S.casqGLUT(i) = 1;
+            S.casqFLUT(i) = K(4);
         end
         close all
     end
