@@ -149,8 +149,8 @@ global S
             S.kaLUT2(i) = K(1);
             S.kqLUT2(i) = K(2);
             S.ktLUT2(i) = K(3);
-            S.casqGLUT(i) = 1;
-            S.casqFLUT(i) = K(4);
+            S.casqFLUT(i) = 1;
+            S.casqGLUT(i) = K(4);
         end
         close all
     end
